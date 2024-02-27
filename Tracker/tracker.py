@@ -3,8 +3,8 @@ import numpy as np
 #NOT DONE YET
 
 #The setup:
-vid_capture = cv2.VideoCapture('test_vid_1.mp4')
-vid_tracker = cv2.Tracker()
+vid_capture = cv2.VideoCapture('F:\\ML_projects\\pointer_trajectory\\Tracker\\test_vid_1.mp4')
+vid_tracker = cv2.TrackerKCF_create()
 colors = np.random.randint(0, 255, (100, 3))
 trajectory = []
 
@@ -22,7 +22,9 @@ while True:
     success, boundary_box = vid_tracker.update(frame)
 
     if success:
+        
         w1, h1, w2, h2 = [int(i) for i in boundary_box]
+
         cv2.rectangle(frame, (w1, h1), (w1 + w2, h1 + h2), (0, 255, 0), 2)
 
         #The pointer:
@@ -30,10 +32,13 @@ while True:
         trajectory.append(pointer)
     
     for i in range(1, len(trajectory)):
-        cv2.line(frame, trajectory[i-1], trajectory[i], colors[i], 2)
+        
+        cv2.line(frame, trajectory[i-1], trajectory[i], (45, 255, 45), 2)
 
     cv2.imshow('Frame', frame)
 
+    if cv2.waitKey(1) == ord('d'):
+        break
 
 vid_capture.release()
 cv2.destroyAllWindows()
