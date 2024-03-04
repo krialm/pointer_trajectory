@@ -7,7 +7,7 @@ def empty(_):
 
 
 
-img = cv2.imread('path')
+img = cv2.imread('new/1_005_250_C001S0001/new_1_005_250_c001s0001000001.jpg')
 
 
 
@@ -27,6 +27,16 @@ while True:
     imgGray = cv2.cvtColor(imgBlur, cv2.COLOR_BGR2GRAY)
     imgCanny = cv2.Canny(imgGray, threshold1, threshold2)
 
+    # Find contours in the edge-detected image
+    contours, _ = cv2.findContours(imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Filter contours based on area, shape, etc.
+    # For simplicity, let's assume the largest contour is the curve
+    largest_contour = max(contours, key=cv2.contourArea)
+
+    # Draw the largest contour on the original image
+    result = cv2.drawContours(img.copy(), [largest_contour], -1, (0, 0, 255), 2)
+
     th3 = cv2.adaptiveThreshold(imgGray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
 
@@ -36,14 +46,7 @@ while True:
     cv2.imshow('Window', imgDil)
     cv2.imshow('Origin', img)
     cv2.imshow('Thresh', th3)
-
-# contours, hierarchy = cv2.findContours(imgDil, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-
-# for cnt in contours:
-#     cntArea = cv2.contourArea(cnt)
-#     cv2.drawContours(img, cnt, -1, (244, 0, 244), 7)
-#     peri = cv2.arcLength(cnt, True)
-#     approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
+    cv2.imshow('Result', result)
 
 
     if cv2.waitKey(1) == ord('d'):
