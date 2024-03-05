@@ -7,14 +7,14 @@ def empty(_):
 
 
 
-img = cv2.imread('new/1_005_250_C001S0001/new_1_005_250_c001s0001000001.jpg')
+img = cv2.imread('/Users/krialm/Projects/pointer_trajectory/data/1_005_250_C001S0001/new_1_005_250_c001s0001000001.jpg')
 
 
 
 cv2.namedWindow('Parameters') 
 cv2.resizeWindow('Parameters', 640, 150)
-cv2.createTrackbar('Threshold1', 'Parameters', 56, 255, empty)
-cv2.createTrackbar('Threshold2', 'Parameters', 91, 255, empty)
+cv2.createTrackbar('Threshold1', 'Parameters', 43, 255, empty)
+cv2.createTrackbar('Threshold2', 'Parameters', 255, 255, empty)
 
 
 
@@ -37,15 +37,12 @@ while True:
     # Draw the largest contour on the original image
     result = cv2.drawContours(img.copy(), [largest_contour], -1, (0, 0, 255), 2)
 
-    th3 = cv2.adaptiveThreshold(imgGray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    th3 = cv2.adaptiveThreshold(imgGray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
 
 
-    kernel = np.ones((7, 7))
+    kernel = np.ones((5, 5))
     imgDil = cv2.dilate(imgCanny, kernel, iterations=1)
 
-    cv2.imshow('Window', imgDil)
-    cv2.imshow('Origin', img)
-    cv2.imshow('Thresh', th3)
     cv2.imshow('Result', result)
 
 

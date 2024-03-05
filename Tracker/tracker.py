@@ -7,7 +7,7 @@ import os
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", default="F:\\ML_projects\\pointer_trajectory\\Tracker\\test_vid_1.mp4", help="path to the video file")
+ap.add_argument("-v", "--video", default="/Users/krialm/Projects/pointer_trajectory/Tracker/test_vid_1.mp4", help="path to the video file")
 args = vars(ap.parse_args())
 video_path = args["video"]
 
