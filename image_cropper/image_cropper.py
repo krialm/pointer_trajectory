@@ -2,8 +2,8 @@ import os
 import cv2
 
 
-image_dir = '/Users/krialm/Downloads/wetransfer_1_005_250_c001s0001_2024-02-21_1207'
-cropped_image_dir = 'data'
+image_dir = 'path'
+cropped_image_dir = 'path'
 
 
 for filename in os.listdir(image_dir):

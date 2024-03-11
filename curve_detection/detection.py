@@ -7,7 +7,7 @@ def empty(_):
 
 
 
-img = cv2.imread('path')
+img = cv2.imread('D:\GitHubRep\pointer_trajectory\samples\cropped_traj.jpg')
 
 
 

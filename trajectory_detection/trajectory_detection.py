@@ -6,20 +6,26 @@ def empty(_):
     pass
 
 
+def is_belong_to_trajectory(pointer_coordinate):
 
-img = cv2.imread('/Users/krialm/Projects/pointer_trajectory/data/1_005_250_C001S0001/new_1_005_250_c001s0001000001.jpg')
+    if pointer_coordinate in largest_contour:
+        return True
+    
+    return False
 
-
+img = cv2.imread('D:\\GitHubRep\\pointer_trajectory\\samples\\cropped_traj.jpg')
 
 cv2.namedWindow('Parameters') 
 cv2.resizeWindow('Parameters', 640, 150)
-cv2.createTrackbar('Threshold1', 'Parameters', 43, 255, empty)
-cv2.createTrackbar('Threshold2', 'Parameters', 255, 255, empty)
+cv2.createTrackbar('Threshold1', 'Parameters', 60, 255, empty)
+cv2.createTrackbar('Threshold2', 'Parameters', 74, 255, empty)
 
+pix_len = 48.3/510
 
-
+print(pix_len)
 
 while True:
+
     threshold1 = cv2.getTrackbarPos('Threshold1', 'Parameters')
     threshold2 = cv2.getTrackbarPos('Threshold2', 'Parameters')
 
@@ -34,18 +40,16 @@ while True:
     # For simplicity, let's assume the largest contour is the curve
     largest_contour = max(contours, key=cv2.contourArea)
 
-    # Draw the largest contour on the original image
+    # Calculate the area of the largest contour
+    area = cv2.contourArea(largest_contour)
+
+    # Draw the largest contour and display the area on the original image
     result = cv2.drawContours(img.copy(), [largest_contour], -1, (0, 0, 255), 2)
-
-    th3 = cv2.adaptiveThreshold(imgGray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-
-
-    kernel = np.ones((5, 5))
-    imgDil = cv2.dilate(imgCanny, kernel, iterations=1)
+    cv2.putText(result, f'Area: {area}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     cv2.imshow('Result', result)
 
-
     if cv2.waitKey(1) == ord('d'):
         break
+
 cv2.destroyAllWindows()
