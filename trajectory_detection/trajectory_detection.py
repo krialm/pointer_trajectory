@@ -1,55 +1,57 @@
 import cv2
-import numpy as np
 
+vid = r"/home/rimantaslav/Desktop/Project_M/Tracker/test_vid_1.mp4"
 
-def empty(_):
-    pass
+cap = cv2.VideoCapture(vid)
 
+frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-def is_belong_to_trajectory(pointer_coordinate):
+fourcc = cv2.VideoWriter_fourcc(*"X264")
+path = r"/home/rimantaslav/Desktop/Project_M/Tracker/Detected Motion.MP4"
+output = cv2.VideoWriter(path, fourcc, 30, (frame_w, frame_h))
 
-    if pointer_coordinate in largest_contour:
-        return True
-    
-    return False
+done, cur_frame = cap.read()
+done, next_frame = cap.read()
 
-img = cv2.imread('D:\\GitHubRep\\pointer_trajectory\\samples\\cropped_traj.jpg')
+centers = []
 
-cv2.namedWindow('Parameters') 
-cv2.resizeWindow('Parameters', 640, 150)
-cv2.createTrackbar('Threshold1', 'Parameters', 60, 255, empty)
-cv2.createTrackbar('Threshold2', 'Parameters', 74, 255, empty)
-
-pix_len = 48.3/510
-
-print(pix_len)
-
-while True:
-
-    threshold1 = cv2.getTrackbarPos('Threshold1', 'Parameters')
-    threshold2 = cv2.getTrackbarPos('Threshold2', 'Parameters')
-
-    imgBlur = cv2.GaussianBlur(img, (7, 7), 1)
-    imgGray = cv2.cvtColor(imgBlur, cv2.COLOR_BGR2GRAY)
-    imgCanny = cv2.Canny(imgGray, threshold1, threshold2)
-
-    # Find contours in the edge-detected image
-    contours, _ = cv2.findContours(imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    # Filter contours based on area, shape, etc.
-    # For simplicity, let's assume the largest contour is the curve
-    largest_contour = max(contours, key=cv2.contourArea)
-
-    # Calculate the area of the largest contour
-    area = cv2.contourArea(largest_contour)
-
-    # Draw the largest contour and display the area on the original image
-    result = cv2.drawContours(img.copy(), [largest_contour], -1, (0, 0, 255), 2)
-    cv2.putText(result, f'Area: {area}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-    cv2.imshow('Result', result)
-
-    if cv2.waitKey(1) == ord('d'):
+while cap.isOpened():
+    if done:
+        diff = cv2.absdiff(cur_frame, next_frame)
+        gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+        thresh, binary = cv2.threshold(blurred, 35, 255, cv2.THRESH_BINARY)
+        dilated = cv2.dilate(binary, None, iterations=12)
+        contours, hierarchy = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        
+        for cnt in contours:
+            (x, y, w, h) = cv2.boundingRect(cnt)
+            
+            if cv2.contourArea(cnt) < 1000:
+                continue
+            
+            cv2.rectangle(cur_frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            
+            center_x = x + w // 2
+            center_y = y + h // 2
+            centers.append((center_x, center_y))
+        
+        for i in range(1, len(centers)):
+            cv2.line(cur_frame, centers[i-1], centers[i], (0, 0, 255), 2)
+        
+        cv2.imshow("frame", cur_frame)
+        output.write(cur_frame)
+        
+        cur_frame = next_frame
+        done, next_frame = cap.read()
+        
+        if cv2.waitKey(30) == ord("f"):
+            break
+    else:
         break
 
 cv2.destroyAllWindows()
+cap.release()
+output.release()
+
