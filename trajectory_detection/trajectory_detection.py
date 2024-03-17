@@ -1,6 +1,6 @@
 import cv2
 
-vid = r"/home/rimantaslav/Desktop/Project_M/Tracker/test_vid_1.mp4"
+vid = r""#insert vid path
 
 cap = cv2.VideoCapture(vid)
 
@@ -8,7 +8,7 @@ frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 fourcc = cv2.VideoWriter_fourcc(*"X264")
-path = r"/home/rimantaslav/Desktop/Project_M/Tracker/Detected Motion.MP4"
+path = r".../Detected Motion.MP4"#insert detected path
 output = cv2.VideoWriter(path, fourcc, 30, (frame_w, frame_h))
 
 done, cur_frame = cap.read()
