@@ -13,7 +13,7 @@ def is_belong_to_trajectory(pointer_coordinate):
     
     return False
 
-img = cv2.imread('D:\\GitHubRep\\pointer_trajectory\\samples\\cropped_traj.jpg')
+img = cv2.imread('/Users/krialm/Projects/pointer_trajectory/samples/cropped_traj.jpg')
 
 cv2.namedWindow('Parameters') 
 cv2.resizeWindow('Parameters', 640, 150)
