@@ -7,7 +7,7 @@ def empty(_):
 
 
 
-img = cv2.imread('D:\GitHubRep\pointer_trajectory\samples\cropped_traj.jpg')
+img = cv2.imread('/Users/krialm/Downloads/wetransfer_1_005_250_c001s0001_2024-02-21_1207/1_005_250_C001S0001/1_005_250_c001s0001000001.jpg')
 
 
 
@@ -26,7 +26,7 @@ while True:
     imgBlur = cv2.GaussianBlur(img, (7, 7), 1)
     imgGray = cv2.cvtColor(imgBlur, cv2.COLOR_BGR2GRAY)
     imgCanny = cv2.Canny(imgGray, threshold1, threshold2)
-
+    
     th3 = cv2.adaptiveThreshold(imgGray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
 

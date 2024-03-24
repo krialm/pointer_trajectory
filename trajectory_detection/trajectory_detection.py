@@ -1,20 +1,20 @@
 import cv2
 
-vid = r""#insert vid path
+vid_path = r"/Users/krialm/Projects/pointer_trajectory/new_1_005_250_c001s0001000001.mp4"#insert vid path
 
-cap = cv2.VideoCapture(vid)
+cap = cv2.VideoCapture(vid_path)
 
 frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 fourcc = cv2.VideoWriter_fourcc(*"X264")
-path = r".../Detected Motion.MP4"#insert detected path
-output = cv2.VideoWriter(path, fourcc, 30, (frame_w, frame_h))
+out_path = r"/Users/krialm/Projects/pointer_trajectory"#insert detected path
+output = cv2.VideoWriter(out_path, fourcc, 30, (frame_w, frame_h))
 
 done, cur_frame = cap.read()
 done, next_frame = cap.read()
 
-img = cv2.imread('/Users/krialm/Projects/pointer_trajectory/samples/cropped_traj.jpg')
+centers = []
 
 while cap.isOpened():
     if done:
@@ -46,7 +46,7 @@ while cap.isOpened():
         cur_frame = next_frame
         done, next_frame = cap.read()
         
-        if cv2.waitKey(30) == ord("f"):
+        if cv2.waitKey(1) == ord("f"):
             break
     else:
         break
@@ -54,4 +54,3 @@ while cap.isOpened():
 cv2.destroyAllWindows()
 cap.release()
 output.release()
-
