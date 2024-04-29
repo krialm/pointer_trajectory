@@ -1,6 +1,6 @@
 import cv2
 
-vid_path = r"/Users/krialm/Projects/pointer_trajectory/new_1_005_250_c001s0001000001.mp4"#insert vid path
+vid_path = r"D:\GitHubRep\pointer_trajectory\croped_test_video.mp4"#insert vid path
 
 cap = cv2.VideoCapture(vid_path)
 
@@ -8,7 +8,7 @@ frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 fourcc = cv2.VideoWriter_fourcc(*"X264")
-out_path = r"/Users/krialm/Projects/pointer_trajectory"#insert detected path
+out_path = r"pointer_trajectory"#insert detected path
 output = cv2.VideoWriter(out_path, fourcc, 30, (frame_w, frame_h))
 
 done, cur_frame = cap.read()
@@ -16,7 +16,7 @@ done, next_frame = cap.read()
 
 centers = []
 
-while cap.isOpened():
+while True:
     if done:
         diff = cv2.absdiff(cur_frame, next_frame)
         gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
@@ -42,7 +42,7 @@ while cap.isOpened():
         
         cv2.imshow("frame", cur_frame)
         output.write(cur_frame)
-        
+            
         cur_frame = next_frame
         done, next_frame = cap.read()
         

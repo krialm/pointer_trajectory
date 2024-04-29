@@ -5,17 +5,14 @@ import cv2
 import imutils
 import os
 
-<<<<<<< Updated upstream
-=======
 #The setup:
-vid_capture = cv2.VideoCapture('/Users/krialm/Projects/pointer_trajectory/Tracker/test_vid_1.mp4')
+vid_capture = cv2.VideoCapture('D:\GitHubRep\pointer_trajectory\croped_test_video.mp4')
 vid_tracker = cv2.TrackerKCF_create()
 colors = np.random.randint(0, 255, (100, 3))
 trajectory = []
->>>>>>> Stashed changes
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", default="/Users/krialm/Projects/pointer_trajectory/Tracker/test_vid_1.mp4", help="path to the video file")
+ap.add_argument("-v", "--video", default="D:\GitHubRep\pointer_trajectory\croped_test_video.mp4", help="path to the video file")
 args = vars(ap.parse_args())
 video_path = args["video"]
 
