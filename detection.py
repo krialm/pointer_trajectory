@@ -29,7 +29,7 @@ def get_contours(frame, thr1, thr2):
 if __name__ == "__main__":
 
 
-    img = cv2.imread(r'D:\GitHubRep\pointer_trajectory\frame_screenshot.jpg')
+    img = cv2.imread(r'/Users/krialm/Projects/pointer_trajectory/out/1_C2_250_C001S0002/new_1_c2_250_c001s0002000001.jpg')
 
     cv2.namedWindow('Parameters') 
     cv2.resizeWindow('Parameters', 640, 150)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     cv2.createTrackbar('Threshold2', 'Parameters', 80, 255, empty)
 
     while True:
-        img = cv2.imread(r'D:\GitHubRep\pointer_trajectory\frame_screenshot.jpg')
+        img = cv2.imread(r'/Users/krialm/Projects/pointer_trajectory/out/1_C2_250_C001S0002/new_1_c2_250_c001s0002000001.jpg')
         threshold1 = cv2.getTrackbarPos('Threshold1', 'Parameters')
         threshold2 = cv2.getTrackbarPos('Threshold2', 'Parameters')
 
