@@ -13,11 +13,11 @@ def get_contours(frame, thr1, thr2):
     imgGray = cv2.cvtColor(imgBlur, cv2.COLOR_BGR2GRAY)
     imgCanny = cv2.Canny(imgGray, thr1, thr2)
     
-    kernel = np.ones((5, 5), np.uint8)
+    kernel = np.ones((1,1), np.uint8)
     imgDil = cv2.dilate(imgCanny, kernel, iterations=2)
-    imgErode = cv2.erode(imgDil, kernel, iterations=1)
+    imgErode = cv2.erode(imgDil, kernel, iterations=2)
 
-    # Find contours
+
     contours, _ = cv2.findContours(imgErode, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     return contours
@@ -29,7 +29,7 @@ def get_contours(frame, thr1, thr2):
 if __name__ == "__main__":
 
 
-    img = cv2.imread(r'/Users/krialm/Projects/pointer_trajectory/out/1_C2_250_C001S0002/new_1_c2_250_c001s0002000001.jpg')
+    img = cv2.imread(r'D:\GitHubRep\pointer_trajectory\croped_test_video.mp4')
 
     cv2.namedWindow('Parameters') 
     cv2.resizeWindow('Parameters', 640, 150)
