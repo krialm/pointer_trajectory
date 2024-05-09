@@ -15,5 +15,5 @@ for filename in os.listdir(image_dir):
         for image_filename in os.listdir(filepath):
             if image_filename.endswith('.jpg') or image_filename.endswith('.png'):
                 img = cv2.imread(os.path.join(filepath, image_filename))
-                cropped_image = img[0:1025, 95:605]
+                cropped_image = img[10:1025, 100:605]
                 cv2.imwrite(os.path.join(new_dir, 'new_' + image_filename), cropped_image)
