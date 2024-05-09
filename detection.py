@@ -6,7 +6,7 @@ def empty(_):
 
 
 
-def get_contours(frame, thr1, thr2):
+def get_contours(frame, thr1=233, thr2=93):
 
 
     imgBlur = cv2.GaussianBlur(frame, (7, 7), 1)
