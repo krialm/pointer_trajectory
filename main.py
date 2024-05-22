@@ -1,17 +1,16 @@
-import detection
+import detection as detection
 import cv2
 import numpy as np
 
-video_pth = r'D:\GitHubRep\pointer_trajectory\croped_test_video.mp4'
+video_pth = r'D:\GitHubRep\pointer_trajectory\Tracking\output_video_11.mp4'
 
 cap = cv2.VideoCapture(video_pth)
 _, frame = cap.read()
-frame = frame[10:-10, 5:-10]
-contours = detection.get_contours(frame, 233, 93)
+frame = frame[10:1020, 100:605]
+contours = detection.get_contours(frame, thr1=100, thr2=140)
 
-# the function should return list of points of trajectory
-points = your_function()
-
+# # the function should return list of points of trajectory
+# points = your_function()ddddddd
 
 def calculate_accuracy(points, contours):
     # Initialize counter for points inside the contour
@@ -26,14 +25,14 @@ def calculate_accuracy(points, contours):
 while True:
 
     _, frame = cap.read()
-    frame = frame[10:-10, 5:-10]
+    frame = frame[10:1025, 100:605]
 
     
     # Calculate accuracy
-    accuracy = calculate_accuracy(points, contours)
+    # accuracy = calculate_accuracy(points, contours)
     
-    # Display the accuracy result on the frame
-    cv2.putText(frame, f'Accuracy: {accuracy*100:.2f}%', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+    # # Display the accuracy result on the frame
+    # cv2.putText(frame, f'Accuracy: {accuracy*100:.2f}%', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
     cv2.drawContours(frame, contours, -1, (0, 255, 0), 2)
     cv2.imshow('F', frame)

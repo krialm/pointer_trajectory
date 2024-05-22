@@ -25,7 +25,6 @@ def get_contours(frame, thr1=233, thr2=93):
 
 
 
-
 if __name__ == "__main__":
 
 

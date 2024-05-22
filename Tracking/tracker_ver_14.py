@@ -1,9 +1,22 @@
+import detection as detection
+
+
+
+def check_accuracy(point, trajectory):
+    pass
+
+
+
+
+
 def draw_trajectory(file_path):
     import cv2
     import numpy as np
 
     vid = file_path
     cap = cv2.VideoCapture(vid)
+
+    print('here')
 
     frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -15,6 +28,10 @@ def draw_trajectory(file_path):
     output = cv2.VideoWriter(output_path, fourcc, fps, (frame_w, frame_h))
 
     done, cur_frame = cap.read()
+
+    
+    contours = detection.get_contours(cur_frame, thr1=100, thr2=140)
+
     done, next_frame = cap.read()
 
     centers = []
@@ -75,6 +92,9 @@ def draw_trajectory(file_path):
                     max_line_length = 55
                     if line_length < max_line_length:
                         cv2.line(cur_frame, current_point, closest_point, (0, 0, 255), 2)
+                        cv2.drawContours(cur_frame, contours, -1, (0, 255, 0), 2)
+
+            print('here')
 
             cv2.imshow("frame", cur_frame)
             output.write(cur_frame)
@@ -96,4 +116,4 @@ def draw_trajectory(file_path):
             f.write(str(i)[1:-1] + "\n")
         f.close()
 
-draw_trajectory("output_video_8.mp4")
+draw_trajectory(r"D:\GitHubRep\pointer_trajectory\Tracking\output_video_8.mp4")

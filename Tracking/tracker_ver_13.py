@@ -93,4 +93,4 @@ def draw_trajectory(file_path):
     cap.release()
     output.release()
 
-draw_trajectory("/home/rimantaslav/Desktop/Project_M/test_vid.mp4")
+draw_trajectory(r"D:\GitHubRep\pointer_trajectory\Tracking\test_vid_1.mp4")
