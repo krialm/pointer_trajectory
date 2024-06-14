@@ -1,32 +1,78 @@
 import detection
 import numpy as np
 import cv2
+import math
 
-def check_accuracy(point, trajectory):
-    if len(point) > 0:
-        for i in trajectory:
-            result = cv2.pointPolygonTest(i, point, False)
+def find_nearest_point(point, contours):
+  """
+  This function finds the nearest point on a trajectory (contour) to a given point.
 
-            if result > 0:
-                print("The point is inside the contour.")
+  Args:
+      point: A tuple or list representing the point (x, y coordinates).
+      contours: A list of NumPy arrays, where each array represents a contour (sequence of points).
+
+  Returns:
+      A tuple containing:
+          - The nearest point on the trajectory (x, y coordinates).
+          - The index of the contour containing the nearest point.
+          - The minimum distance between the point and the nearest point on the trajectory.
+
+      - None if no contours are provided.
+  """
+  if not contours:
+      return None  # No contours
+
+  min_distance = float('inf')  # Initialize minimum distance to infinity
+  nearest_point = None
+
+  for i in contours:
+      for contour in i:
+        # Calculate distances between point and each point in the contour
+        distances = np.linalg.norm(contour - point, axis=1)  # Euclidean distance
+        min_idx = np.argmin(distances)  # Index of the closest point on the current contour
+
+        # Update minimum distance and nearest point if closer point found
+        if np.any(distances < min_distance):
+            min_distance = distances[min_idx]
+            nearest_point = contour[min_idx]
+            nearest_contour_index = i
+
+  return nearest_point
+
+def check_distance(point, trajectory):
+    nearest_point = find_nearest_point(point, trajectory)
+    # Calculate squared difference for each dimension
+    squared_differences = [(p1 - p2) ** 2 for p1, p2 in zip(point, nearest_point)]
+
+    # Sum the squared differences
+    sum_of_squares = sum(squared_differences)
+
+    # Take the square root to get the Euclidean distance
+    distance = math.sqrt(sum_of_squares)
+
+    return distance
 
 
 
-    else:
-        return False
-
-def hui(file_path):
+def detect_trajectory(file_path):
+    """" 
+    This function takes first frame 
+    and use function get_contours
+    from detection.py to create 
+    gloabal variable of trajectory contours
+    """
     crap = cv2.VideoCapture(file_path)
     done, frame = crap.read()
-    global contours_1
-    contours_1 = detection.get_contours(frame, thr1=100, thr2=140)
+    global trajectory_contours
+    trajectory_contours = detection.get_contours(frame, thr1=100, thr2=140)
+
 
 def draw_trajectory(file_path):
 
     vid = file_path
     cap = cv2.VideoCapture(vid)
 
-    hui(vid)
+    detect_trajectory(vid)
 
     frame_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -47,6 +93,9 @@ def draw_trajectory(file_path):
     roi = (0, 0, frame_w, frame_h)
 
     half_length_frame = total_frames // 2
+
+    all_frames = 0
+    good_frames = 0
 
     while cap.isOpened():
         if done:
@@ -100,11 +149,17 @@ def draw_trajectory(file_path):
                     max_line_length = 55
                     if line_length < max_line_length:
                         
-                        cv2.drawContours(cur_frame, contours_1, -1, (0, 255, 0), 1)
+                        cv2.drawContours(cur_frame, trajectory_contours, -1, (0, 255, 0), 1)
                         cv2.line(cur_frame, current_point, closest_point, (0, 0, 255), 2)
 
 
-            check_accuracy(current_point, contours_1)
+            
+            distance = check_distance(current_point, trajectory_contours)
+            all_frames+=1
+            if distance >= 0 and distance <7:
+                good_frames+=1
+            cv2.putText(cur_frame, f"Accuracy: {str(round(good_frames/all_frames, 3))}", (100,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
+
             cv2.imshow("frame", cur_frame)
             output.write(cur_frame)
 
@@ -115,6 +170,8 @@ def draw_trajectory(file_path):
                 break
         else:
             break
+    
+
 
     cv2.destroyAllWindows()
     cap.release()
@@ -124,4 +181,6 @@ def draw_trajectory(file_path):
             f.write(str(i)[1:-1] + "\n")
         f.close()
 
-draw_trajectory(r"D:\GitHubRep\pointer_trajectory\Tracking\output_video_8-ezgif.com-crop-video (1).mp4")
+if __name__ == '__main__':
+
+    draw_trajectory(r"D:\GitHubRep\pointer_trajectory\Tracking\output_video_8-ezgif.com-crop-video (1).mp4")
